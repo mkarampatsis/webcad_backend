@@ -10,13 +10,13 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
   // } catch (err) { next(err); }
 };
 
-export const login = async (req: Request, res: Response, next: NextFunction) => {
-  // try {
-  //   const { username, password } = req.body;
-  //   const result = await authService.login(username, password);
-  //   if (!result) return res.status(401).json({ message: 'Invalid credentials' });
-  //   res.json({ token: result.token, user: { id: result.user._id, username: result.user.username } });
-  // } catch (err) { next(err); }
+export const googleLogin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { idToken } = req.body;
+    const result = await authService.googleLogin(idToken);
+    if (!result.status) return res.status(401).json({ message: result.message });
+    res.json({ token: result.token, user: result.user });
+  } catch (err) { next(err); }
 };
 
 export const me = async (req: Request, res: Response, _next: NextFunction) => {

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/env';
 import { User } from '../models/User';
 
-import * as authCtrl from 'src/controllers/auth.controller';
+import * as authCtrl from 'src/controllers/auth.controller'
 
 const router = Router();
 
@@ -12,7 +12,7 @@ const router = Router();
  * For now: expects { googleId, email, name }
  * Later: you’ll verify Google ID token here.
  */
-router.get('/google', authCtrl.login);
+router.get('/google', authCtrl.googleLogin);
 router.post('/register', authCtrl.register);
 router.get('/me', authCtrl.me);
 // router.get('/google', async (req, res, next) => {
