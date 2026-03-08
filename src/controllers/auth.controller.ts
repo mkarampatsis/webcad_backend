@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import * as authService from 'src/services/auth.service';
+import * as authService from '../services/auth.service';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   // try {
@@ -12,11 +12,12 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
 export const googleLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { idToken } = req.body;
-    const result = await authService.googleLogin(idToken);
+    const { token } = req.body;
+    const result = await authService.googleLogin(token);
     if (!result.status) return res.status(401).json({ message: result.message });
-    res.json({ token: result.token, user: result.user });
-  } catch (err) { next(err); }
+    res.status(200).json({ token: result.token, user: result.user });
+  } 
+  catch (err) { next(err); }
 };
 
 export const me = async (req: Request, res: Response, _next: NextFunction) => {

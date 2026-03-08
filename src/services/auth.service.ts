@@ -1,7 +1,7 @@
-import { User } from 'src/models/User';
+import { User } from '../models/User';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { verifyGoogleIdToken } from 'src/controllers/google.controller';
+import { verifyGoogleIdToken } from '../controllers/google.controller';
 // import bcrypt from 'bcrypt'
 // import AuthPayload from '../models/auth.model';
 
