@@ -36,7 +36,7 @@ export const googleLogin = async(idToken:string) =>{
       {
         sub: appUserId,
         email: googleUser.email,
-        name: googleUser.name,
+        name: googleUser.name
       },
       process.env.JWT_SECRET as string,
       { expiresIn: '1h' }
