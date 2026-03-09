@@ -34,7 +34,7 @@ export const googleLogin = async(idToken:string) =>{
 
     const token = jwt.sign(
       {
-        sub: appUserId,
+        googleId: appUserId,
         email: googleUser.email,
         name: googleUser.name
       },
@@ -46,10 +46,10 @@ export const googleLogin = async(idToken:string) =>{
       status: true,
       token,
       user: {
-        id: appUserId,
+        googleId: appUserId,
         email: googleUser.email,
         name: googleUser.name,
-        picture: googleUser.picture,
+        photoUrl: googleUser.picture,
       },
     });
   } catch (err) {
