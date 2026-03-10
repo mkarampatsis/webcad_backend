@@ -29,14 +29,26 @@ export const googleLogin = async(idToken:string) =>{
     if (!googleUser.email_verified) {
       return {status: false, message:"Email not verified"};
     }
-
-    const appUserId = googleUser.sub;
-
+    
+    let user = await User.findOne({ userId: googleUser.sub });
+    if (!user) {
+      user = new User({
+        userId: googleUser.sub,
+        email: googleUser.email,
+        name: googleUser.name,
+        photoUrl: googleUser.picture,
+        roles: ['user'] // default role
+      });
+      await user.save();
+    } 
+    
     const token = jwt.sign(
       {
-        googleId: appUserId,
+        userId: googleUser.sub,
         email: googleUser.email,
-        name: googleUser.name
+        name: googleUser.name,
+        photoUrl: googleUser.picture,
+        roles: user.roles
       },
       process.env.JWT_SECRET as string,
       { expiresIn: '1h' }
@@ -44,13 +56,7 @@ export const googleLogin = async(idToken:string) =>{
 
     return ({
       status: true,
-      token,
-      user: {
-        googleId: appUserId,
-        email: googleUser.email,
-        name: googleUser.name,
-        photoUrl: googleUser.picture,
-      },
+      token
     });
   } catch (err) {
     console.error('Google auth error:', err);
