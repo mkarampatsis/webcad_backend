@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import { errorHandler } from './middleware/errorHandler';
 import morgan from 'morgan';
 import cors from 'cors';
+import userRoutes from './routes/userRoutes';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cors({
 }));
 
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 app.use('/session', sessionRoutes);
 app.use('/upload', uploadRoutes);
 
