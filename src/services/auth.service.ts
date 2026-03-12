@@ -59,10 +59,10 @@ export const googleLogin = async(idToken:string) =>{
 
 export const login = async (email: string, password: string) => {
   const user = await User.findOne({ email }).populate('roles');
-  if (!user) return null;
+  if (!user) return {status: false, message:"User not found"};
   
   const match = await bcrypt.compare(password, user.password);
-  if (!match) return null;
+  if (!match) return {status: false, message:"Invalid credentials"};
   
   const token = jwt.sign(
     {
@@ -74,7 +74,8 @@ export const login = async (email: string, password: string) => {
     },
     process.env.JWT_SECRET as string,
     { expiresIn: '1h' }
-    );
+  );
+  
   return ({
     status: true,
     token

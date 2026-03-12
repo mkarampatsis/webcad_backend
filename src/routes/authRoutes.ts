@@ -5,6 +5,6 @@ import * as authCtrl from '../controllers/auth.controller'
 const router = Router();
 
 router.post('/google', authCtrl.googleLogin);
-router.get('/me', authCtrl.me);
+router.post('/login', authCtrl.login);
 
 export default router;

@@ -1,7 +1,7 @@
 import { User, IUser } from '../models/User';
 import bcrypt from 'bcrypt';
 
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10', 10);
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '', 10);
 
 export const findUserByEmail = async (email: string) => {
   return await User.findOne({ email });
@@ -9,7 +9,7 @@ export const findUserByEmail = async (email: string) => {
 
 export const createUser = async (data: IUser) => {
   // create user via user service logic would be nicer, but keep simple
-  console.log('Creating user with data:', data);
+  console.log('Creating user with data:', data.email);
   if (data.password) {
     const hash = await bcrypt.hash(data.password, SALT_ROUNDS);
     data.password = hash;
