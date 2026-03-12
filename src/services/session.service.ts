@@ -5,6 +5,7 @@ import { startStudentContainer, stopStudentContainer } from '../docker/dockerSer
 
 export const createSession = async (userId: string, hostname: string) => {
   try {
+    console.log(`Creating session for user ${userId}, hostname: ${hostname}`);
     const folderPath = ensureUserFolder(userId);
     const hostPort = allocatePort();
 

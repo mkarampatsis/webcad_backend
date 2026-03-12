@@ -4,8 +4,9 @@ import { config } from '../config/env';
 
 export function requireUser(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
+  console.log('Auth header:', authHeader);
   if (!authHeader?.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ status:false, message: 'Unauthorized' });
   }
 
   const token = authHeader.slice(7);
@@ -14,6 +15,6 @@ export function requireUser(req: Request, res: Response, next: NextFunction) {
     (req as any).userId = payload.userId;
     next();
   } catch {
-    return res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ status:false, message: 'Invalid token' });
   }
 }
