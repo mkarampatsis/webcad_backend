@@ -12,14 +12,14 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(cors());
-app.use(cors({ origin: 'http://localhost:4200', credentials: true }));
+app.use(cors({ origin: ['http://localhost:4200', 'https://webcad.duckdns.org'], credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors({
-  // origin: '*'
-  origin: ['http://localhost:4200']
-}));
+// app.use(cors({
+//   // origin: '*'
+//   origin: ['http://localhost:4200']
+// }));
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
