@@ -15,10 +15,10 @@ export async function startStudentContainer(
   hostPort: number,
   folderPath: string
 ): Promise<string> {
-  const containerName = `student_${userId}`;
+  const containerName = `webcad_${userId}`;
   const cmd = [
     'docker run -d',
-    `-v ${folderPath}:/opt/student_files`,
+    `-v ${folderPath}:/opt/webcad_files`,
     `-p ${hostPort}:6080`,
     `--name ${containerName}`,
     config.dockerImage

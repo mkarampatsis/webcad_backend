@@ -1,11 +1,15 @@
 import { Session } from '../models/Session';
 import { ensureUserFolder } from '../utils/fsUtils';
 import { allocatePort } from '../utils/portAllocator';
-import { startStudentContainer, stopStudentContainer } from '../docker/dockerService';
+import { startStudentContainer, stopStudentContainer } from './dockerService';
+import dotenv from 'dotenv';
 
-export const createSession = async (userId: string, hostname: string) => {
+dotenv.config();
+const HOSTNAME = process.env.HOSTNAME;
+
+export const createSession = async (userId: string) => {
   try {
-    console.log(`Creating session for user ${userId}, hostname: ${hostname}`);
+    console.log(`Creating session for user ${userId}`);
     const folderPath = ensureUserFolder(userId);
     const hostPort = allocatePort();
 
@@ -18,7 +22,7 @@ export const createSession = async (userId: string, hostname: string) => {
       folderPath
     });
 
-    const url = `http://${hostname}:${hostPort}/vnc_lite.html?autoconnect=1&resize=scale`;
+    const url = `http://${HOSTNAME}:${hostPort}/vnc_lite.html?autoconnect=1&resize=scale`;
 
     return { status: true, sessionId: session._id, url };
   } catch (err) {
