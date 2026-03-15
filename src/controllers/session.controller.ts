@@ -4,6 +4,7 @@ import * as sessionService from '../services/session.service';
 export const createSession = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { sessionData } = req.body;
+    console.log('Creating session with data:', sessionData);
     const result = await sessionService.createSession(sessionData);
     if (!result.status) return res.status(400).json({ status: false, message: "Failed to create session" });
     res.status(201).json({ status: true, sessionId: result.sessionId, url: result.url, message: 'Session created' });

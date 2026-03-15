@@ -2,7 +2,8 @@ import { Schema, model } from 'mongoose';
 
 const sessionSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    // userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: String, ref: 'User', required: true },
     containerName: { type: String, required: true },
     hostPort: { type: Number, required: true },
     folderPath: { type: String, required: true },

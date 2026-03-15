@@ -1,3 +1,4 @@
+import { IUser } from 'src/models/User';
 import { Session } from '../models/Session';
 import { ensureUserFolder } from '../utils/fsUtils';
 import { allocatePort } from '../utils/portAllocator';
@@ -7,16 +8,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 const HOSTNAME = process.env.HOSTNAME;
 
-export const createSession = async (userId: string) => {
+export const createSession = async (user: IUser) => {
   try {
-    console.log(`Creating session for user ${userId}`);
-    const folderPath = ensureUserFolder(userId);
+    console.log(`Creating session for user ${user.email}`);
+    const folderPath = ensureUserFolder(user.email);
     const hostPort = allocatePort();
 
-    const containerName = await startStudentContainer(userId, hostPort, folderPath);
+    const containerName = await startStudentContainer(user.userId, hostPort, folderPath);
 
     const session = await Session.create({
-      userId,
+      userId: user.userId,
       containerName,
       hostPort,
       folderPath
