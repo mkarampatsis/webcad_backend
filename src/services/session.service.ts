@@ -10,22 +10,23 @@ const HOSTNAME = process.env.HOSTNAME;
 
 export const createSession = async (user: IUser) => {
   try {
-    console.log(`Creating session for user ${user.email}`);
+    // console.log(`Creating session for user ${user.email}`);
     const folderPath = ensureUserFolder(user.email);
     const hostPort = allocatePort();
-
-    const containerName = await startStudentContainer(user.userId, hostPort, folderPath);
-
+    // console.log(`Allocated port: ${hostPort}, folder path: ${folderPath}, for user ${user.email}, userId: ${user.userId}`);
+    // const containerName = await startStudentContainer(user.userId, hostPort, folderPath);
+    const containerName = `webcad_${user.userId}`;
     const session = await Session.create({
       userId: user.userId,
+      email: user.email,
       containerName,
       hostPort,
       folderPath
     });
 
     const url = `http://${HOSTNAME}:${hostPort}/vnc_lite.html?autoconnect=1&resize=scale`;
-
-    return { status: true, sessionId: session._id, url };
+    // console.log(`Session created with URL: ${url}`);
+    return { status: true, message: 'Session created', sessionId: session._id, url };
   } catch (err) {
     console.error('Create session error:', err);
     return { status: false, message: 'Failed to create session' };
