@@ -15,3 +15,19 @@ export const getFilesByEmail = async (req: Request, res: Response, next: NextFun
     res.status(400).json({ status: false, message: `Problem in getting files ${err}`, files:[]})
    }
 };
+
+export const uploadFile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const email = req.params.email as string;
+
+    res.json({
+      status:true,
+      message: "File uploaded successfully",
+      email,
+      file: req.file
+    });
+  } catch (err: any) {
+    res.status(400).json({ status:false, message:`Problem in uploading file, ${err.message}` });
+  }
+
+}

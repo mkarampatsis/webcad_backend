@@ -2,12 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import { config } from '../config/env';
 
-export function getUserFolder(userId: string): string {
-  return path.join(config.uploadsBasePath, userId);
+export function getUserFolder(email: string): string {
+  return path.join(config.uploadsBasePath, email);
 }
 
-export function ensureUserFolder(userId: string): string {
-  const folder = getUserFolder(userId);
+export function ensureUserFolder(email: string): string {
+  const folder = getUserFolder(email);
   if (!fs.existsSync(folder)) {
     fs.mkdirSync(folder, { recursive: true });
   }

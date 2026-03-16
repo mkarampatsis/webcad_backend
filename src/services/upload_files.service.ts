@@ -1,11 +1,7 @@
 import multer from 'multer';
 import fs from 'fs/promises';
 import path from 'path';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const UPLOADS_BASE_PATH = process.env.UPLOADS_BASE_PATH || '';
+import { config } from '../config/env';
 
 export const getFilesByEmail = async (email: string) => {
   console.log('Getting user files for:', email);
@@ -19,7 +15,7 @@ export const getFilesByEmail = async (email: string) => {
   }
 
   // Build the full path: /uploads/<email>
-  const userFolder = path.join(UPLOADS_BASE_PATH, safeEmail);
+  const userFolder = path.join(config.uploadsBasePath, safeEmail);
 
   try {
     // Check if folder exists
@@ -40,35 +36,3 @@ export const getFilesByEmail = async (email: string) => {
 
   return { status:true, message:'User files returned', files:files }
 }
-
-function sanitizeEmail(email: string): string {
-  const safe = email.trim().toLowerCase();
-  if (safe.includes("..") || safe.includes("/") || safe.includes("\\")) {
-    throw new Error("Invalid email format");
-  }
-  return safe;
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    try {
-      const email = sanitizeEmail(req.params.email);
-      const userFolder = path.join(UPLOADS_BASE_PATH, email);
-
-      if (!fs.existsSync(userFolder)) {
-        fs.mkdirSync(userFolder, { recursive: true });
-      }
-
-      cb(null, userFolder);
-    } catch (err) {
-      cb(err as Error, "");
-    }
-  },
-
-  filename: (_req, file, cb) => {
-    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, "_");
-    cb(null, Date.now() + "_" + safeName);
-  }
-});
-
-export const upload = multer({ storage });
