@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import multer from 'multer';
-import path from 'path';
 import { requireUser } from '../middleware/authMiddleware';
 import { ensureUserFolder } from '../utils/fsUtils';
+import * as uploadCtrl from '../controllers/upload_files.controller'
 
 const router = Router();
 
@@ -23,5 +23,7 @@ const upload = multer({ storage });
 router.post('/file', requireUser, upload.single('file'), (req, res) => {
   res.json({ ok: true, filename: req.file?.filename });
 });
+
+router.get('/getfiles/:email', uploadCtrl.getFilesByEmail )
 
 export default router;
