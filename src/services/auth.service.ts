@@ -1,11 +1,11 @@
 import { User } from '../models/User';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import { verifyGoogleIdToken } from '../controllers/google.controller';
 import bcrypt from 'bcrypt'
 // import AuthPayload from '../models/auth.model';
 
-dotenv.config();
+// dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'change_me';
 const JWT_EXPIRES = '7d';

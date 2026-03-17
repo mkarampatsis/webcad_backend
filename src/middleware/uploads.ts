@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 
   filename: (_req, file, cb) => {
     const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, "_");
-    cb(null, Date.now() + "_" + safeName);
+    cb(null, Date.now() + "~" + safeName);
   }
 });
 

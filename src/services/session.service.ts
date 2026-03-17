@@ -3,9 +3,9 @@ import { Session } from '../models/Session';
 import { ensureUserFolder } from '../utils/fsUtils';
 import { allocatePort } from '../utils/portAllocator';
 import { startStudentContainer, stopStudentContainer } from './dockerService';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 
-dotenv.config();
+// dotenv.config();
 const HOSTNAME = process.env.HOSTNAME;
 
 export const createSession = async (user: IUser) => {
@@ -14,8 +14,8 @@ export const createSession = async (user: IUser) => {
     const folderPath = ensureUserFolder(user.email);
     const hostPort = allocatePort();
     // console.log(`Allocated port: ${hostPort}, folder path: ${folderPath}, for user ${user.email}, userId: ${user.userId}`);
-    // const containerName = await startStudentContainer(user.userId, hostPort, folderPath);
-    const containerName = `webcad_${user.userId}`;
+    const containerName = await startStudentContainer(user.userId, hostPort, folderPath);
+    // const containerName = `webcad_${user.userId}`;
     const session = await Session.create({
       userId: user.userId,
       email: user.email,

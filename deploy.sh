@@ -8,6 +8,7 @@ echo "Syncing backend to server..."
 rsync -avz --delete \
   --exclude=node_modules \
   --exclude=.git \
+  --exclude=.env.local \
   . webcad:~/projects/webcad-backend/
 
 echo "Installing production dependencies on server..."
