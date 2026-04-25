@@ -1,6 +1,17 @@
 import { Schema, model } from 'mongoose';
 
-const sessionSchema = new Schema(
+export interface ISession extends Document {
+  userId: string;
+  email: string;
+  containerName: string;
+  hostPort: number;
+  folderPath: string;
+  status: string;
+  startedAt: Date;
+  lastActivityAt: Date;
+}
+
+const sessionSchema = new Schema<ISession>(
   {
     // userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     userId: { type: String, ref: 'User', required: true },
@@ -15,4 +26,4 @@ const sessionSchema = new Schema(
   { timestamps: true }
 );
 
-export const Session = model('Session', sessionSchema);
+export default model<ISession>("Session", sessionSchema);

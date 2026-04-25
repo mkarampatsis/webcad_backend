@@ -1,37 +1,55 @@
-import { IUser } from 'src/models/User';
-import { Session } from '../models/Session';
+import { IUser } from 'src/models/user.model';
+import Session  from '../models/session.model';
 import { ensureUserFolder } from '../utils/fsUtils';
 import { allocatePort } from '../utils/portAllocator';
 import { startStudentContainer, stopStudentContainer } from './dockerService';
-// import dotenv from 'dotenv';
+import * as sessionDAO from '../dao/session.dao';
+import { CreateSessionDTO } from 'src/dto/user.dto';
 
-// dotenv.config();
+
 const HOSTNAME = process.env.HOSTNAME;
 
-export const createSession = async (user: IUser) => {
+export const createSession = async (payload: CreateSessionDTO) => {
   try {
-    // console.log(`Creating session for user ${user.email}`);
-    const folderPath = ensureUserFolder(user.email);
+    const userId = payload.userId;
+    const email = payload.email.email;
+    
+    const folderPath = ensureUserFolder(email);
     const hostPort = allocatePort();
-    // console.log(`Allocated port: ${hostPort}, folder path: ${folderPath}, for user ${user.email}, userId: ${user.userId}`);
-    const containerName = await startStudentContainer(user.userId, hostPort, folderPath);
-    // const containerName = `webcad_${user.userId}`;
-    const session = await Session.create({
-      userId: user.userId,
-      email: user.email,
+    const containerName = await startStudentContainer(userId, hostPort, folderPath);
+
+    const session = await sessionDAO.createSession({
+      userId,
+      email,
       containerName,
       hostPort,
       folderPath
     });
-
     const url = `http://${HOSTNAME}:${hostPort}/vnc_lite.html?autoconnect=1&resize=scale`;
-    // console.log(`Session created with URL: ${url}`);
     return { status: true, message: 'Session created', sessionId: session._id, url };
   } catch (err) {
-    console.error('Create session error:', err);
     return { status: false, message: 'Failed to create session' };
   }
 }
+
+export const startSession = async (email: string) => {
+  try {
+    const session = await Session.findOne({ email: email });
+    if (!session) return { status: false, message: 'Session not found' };
+
+    if (session.status === 'stopped') {
+      session.status = 'running';
+      session.lastActivityAt = new Date();
+      await session.save();
+    }
+
+    const hostPort = session.hostPort;
+    const url = `http://${HOSTNAME}:${hostPort}/vnc_lite.html?autoconnect=1&resize=scale`;
+    return { status: true, message: 'Session found', sessionId: session._id, url };
+  } catch (err) {
+    return { status: false, message: 'Failed to find session' };
+  }
+}  
 
 export const stopSession = async (sessionId: string) => {
   try {
@@ -40,6 +58,7 @@ export const stopSession = async (sessionId: string) => {
 
     await stopStudentContainer(session.containerName);
     session.status = 'stopped';
+    session.lastActivityAt = new Date();
     await session.save();
 
     return { status: true, message: 'Session stopped' };

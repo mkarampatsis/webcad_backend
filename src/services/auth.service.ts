@@ -1,14 +1,12 @@
-import { User } from '../models/User';
+import User from '../models/user.model';
 import jwt from 'jsonwebtoken';
-// import dotenv from 'dotenv';
-import { verifyGoogleIdToken } from '../controllers/google.controller';
 import bcrypt from 'bcrypt'
+import { verifyGoogleIdToken } from '../controllers/google.controller';
+import * as userService from './user.service';
+import { config } from '../config/env';
 // import AuthPayload from '../models/auth.model';
 
-// dotenv.config();
-
-const JWT_SECRET = process.env.JWT_SECRET || 'change_me';
-const JWT_EXPIRES = '7d';
+const JWT_SECRET = config.jwtSecret;
 
 export const googleLogin = async(idToken:string) =>{
   try {
@@ -23,18 +21,16 @@ export const googleLogin = async(idToken:string) =>{
       return {status: false, message:"Email not verified"};
     }
     
-    let user = await User.findOne({ userId: googleUser.sub });
+    let user = await userService.findUserByEmail(googleUser.email!);
     if (!user) {
-      user = new User({
-        userId: googleUser.sub,
-        email: googleUser.email,
-        name: googleUser.name,
-        photoUrl: googleUser.picture,
-        roles: ['user'] // default role
+      user = await userService.createGoogleUser({
+        email: googleUser.email!,
+        name: googleUser.name || 'Google User',
+        photoUrl: googleUser.picture || '',
+        userId: googleUser.sub
       });
-      await user.save();
-    } 
-    
+    }
+      
     const token = jwt.sign(
       {
         userId: googleUser.sub,
@@ -43,7 +39,7 @@ export const googleLogin = async(idToken:string) =>{
         photoUrl: googleUser.picture,
         roles: user.roles
       },
-      process.env.JWT_SECRET as string,
+      JWT_SECRET,
       { expiresIn: '1h' }
     );
 
@@ -72,7 +68,7 @@ export const login = async (email: string, password: string) => {
       photoUrl: user.photoUrl,
       roles: user.roles
     },
-    process.env.JWT_SECRET as string,
+    JWT_SECRET,
     { expiresIn: '1h' }
   );
   
