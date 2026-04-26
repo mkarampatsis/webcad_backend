@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as userService from '../services/user.service';
-import { CreateRegisteredUserDTO, UpdateRegisteredUserDTO } from '../dto/user.dto';
+import { CreateRegisteredUserDTO, UpdateUserDTO } from '../dto/user.dto';
 
 export const getAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -75,7 +75,7 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
       return res.status(400).json({ message: 'Invalid username' });
     }
     
-    const data: UpdateRegisteredUserDTO = req.body;
+    const data: UpdateUserDTO = req.body;
 
     const result = await userService.updateUser(username, data);
 

@@ -5,7 +5,7 @@ import * as userDTO from '../dto/user.dto';
 import * as userService from './user.service';
 import { Types } from 'mongoose';
 
-import { toUserResponseDTO } from '../mappers/user.mapper';
+// import { toUserResponseDTO } from '../mappers/user.mapper';
 import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '', 10);
@@ -53,6 +53,7 @@ export const createRegisteredUser = async (data: userDTO.CreateRegisteredUserDTO
 
   const user = await userDAO.createUser({
     ...data,
+    userId: new Date().getTime().toString(),
     roles: roleIds
   });
   return user;
@@ -79,7 +80,7 @@ export const createGoogleUser = async (data: userDTO.CreateGoogleUserDTO) => {
   return user;
 };
 
-export const updateUser = async (username: string, payload: userDTO.UpdateRegisteredUserDTO) => {
+export const updateUser = async (username: string, payload: userDTO.UpdateUserDTO) => {
   const updateData: Partial<IUser> = {};
 
   if (payload.name !== undefined) updateData.name = payload.name;
@@ -92,7 +93,8 @@ export const updateUser = async (username: string, payload: userDTO.UpdateRegist
   }
 
   const user = await userDAO.updateUser(username, updateData);
-  return user ? toUserResponseDTO(user) : null;
+  // return user ? toUserResponseDTO(user) : null;
+  return user;
 };
 
 export const deleteUser = async (username: string) => {

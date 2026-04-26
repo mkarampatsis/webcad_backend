@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 export interface ISession extends Document {
+  _id: string;
   userId: string;
   email: string;
   containerName: string;

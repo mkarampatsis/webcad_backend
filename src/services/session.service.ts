@@ -4,15 +4,14 @@ import { ensureUserFolder } from '../utils/fsUtils';
 import { allocatePort } from '../utils/portAllocator';
 import { startStudentContainer, stopStudentContainer } from './dockerService';
 import * as sessionDAO from '../dao/session.dao';
-import { CreateSessionDTO } from 'src/dto/user.dto';
-
+import { CreateSessionDTO, UpdateSessionDTO } from 'src/dto/user.dto';
 
 const HOSTNAME = process.env.HOSTNAME;
 
 export const createSession = async (payload: CreateSessionDTO) => {
   try {
     const userId = payload.userId;
-    const email = payload.email.email;
+    const email = payload.email;
     
     const folderPath = ensureUserFolder(email);
     const hostPort = allocatePort();
@@ -34,13 +33,18 @@ export const createSession = async (payload: CreateSessionDTO) => {
 
 export const startSession = async (email: string) => {
   try {
-    const session = await Session.findOne({ email: email });
+    // const session = await Session.findOne({ email: email });
+    const session = await sessionDAO.findByEmail(email);
     if (!session) return { status: false, message: 'Session not found' };
 
     if (session.status === 'stopped') {
-      session.status = 'running';
-      session.lastActivityAt = new Date();
-      await session.save();
+      const payload: UpdateSessionDTO  = {
+        status: 'running',
+        lastActivityAt: new Date()
+      };
+      const updatedSession = await sessionDAO.updateSession(session._id, payload);
+      if (!updatedSession) return { status: false, message: 'Failed to update session' };
+      await startStudentContainer(updatedSession.userId, updatedSession.hostPort, updatedSession.folderPath);
     }
 
     const hostPort = session.hostPort;

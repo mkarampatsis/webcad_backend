@@ -8,17 +8,6 @@ export interface CreateGoogleUserDTO {
   roles?: string[];
 }
 
-export interface ResponseGoogleUserDTO {
-  id: string;
-  userId: string;
-  email: string;
-  name: string;
-  photoUrl?: string;
-  roles?: RoleDTO[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface CreateRegisteredUserDTO {
   userId: string;
   email: string;
@@ -28,23 +17,28 @@ export interface CreateRegisteredUserDTO {
   roles?: string[];
 }
 
-export interface UpdateRegisteredUserDTO {
+export interface ResponseUserDTO {
+  id: string;
+  userId: string;
+  email: string;
+  name: string;
+  photoUrl?: string;
+  roles?: RoleDTO[];
+}
+
+export interface UpdateUserDTO {
   name?: string;
   password?: string;
   roles?: string[];
 }
 
-export interface ResponseRegisteredUserDTO {
-  id: string;
-  userId: string;
-  email: string;
-  name: string;
-  roles?: RoleDTO[];
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 export interface CreateSessionDTO {
   userId: string;
-  email: ResponseRegisteredUserDTO;
+  email: string;
+}
+
+export interface UpdateSessionDTO {
+  status: string;
+  lastActivityAt: Date;
 }
