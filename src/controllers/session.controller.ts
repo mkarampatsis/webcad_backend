@@ -21,8 +21,8 @@ export const getSessionByEmail = async (req: Request, res: Response, next: NextF
 
 export const createSession = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const sessionData: CreateSessionDTO = req.body;
-    console.log('Creating session with data:', sessionData);
+    const sessionData: CreateSessionDTO = req.body.sessionData;
+    
     const result = await sessionService.createSession(sessionData);
     if (!result.status) 
       return res.status(400).json({ status: false, message: "Failed to create session" });

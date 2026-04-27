@@ -10,13 +10,14 @@ const HOSTNAME = process.env.HOSTNAME;
 
 export const createSession = async (payload: CreateSessionDTO) => {
   try {
+    
     const userId = payload.userId;
     const email = payload.email;
     
     const folderPath = ensureUserFolder(email);
-    const hostPort = allocatePort();
+    const hostPort = await allocatePort();
+    
     const containerName = await startStudentContainer(userId, hostPort, folderPath);
-
     const session = await sessionDAO.createSession({
       userId,
       email,
