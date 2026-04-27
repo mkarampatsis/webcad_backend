@@ -6,13 +6,13 @@ import { CreateSessionDTO } from '../dto/user.dto';
 export const getSessionByEmail = async (req: Request, res: Response, next: NextFunction) => {     
   try {
     const { email } = req.params;
-    console.log(`Get session by email ${email}`);
-    
+        
     if (typeof email!=='string') {
       return res.status(400).json({ status: false, message: "Invalid email address" });
     } 
     
     const result = await sessionService.startSession(email);
+    
     if (!result.status) return res.status(400).json({ status: false, message: "Failed to find session" });
     res.status(201).json({ status: result.status, sessionId: result.sessionId, url: result.url, message: result.message });
   } 

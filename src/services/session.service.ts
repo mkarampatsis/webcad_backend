@@ -35,7 +35,9 @@ export const startSession = async (email: string) => {
   try {
     // const session = await Session.findOne({ email: email });
     const session = await sessionDAO.findByEmail(email);
-    if (!session) return { status: false, message: 'Session not found' };
+    
+    if (!session) 
+      return { status: false, message: 'Session not found' };
 
     if (session.status === 'stopped') {
       const payload: UpdateSessionDTO  = {
@@ -49,6 +51,7 @@ export const startSession = async (email: string) => {
 
     const hostPort = session.hostPort;
     const url = `http://${HOSTNAME}:${hostPort}/vnc_lite.html?autoconnect=1&resize=scale`;
+    
     return { status: true, message: 'Session found', sessionId: session._id, url };
   } catch (err) {
     return { status: false, message: 'Failed to find session' };
