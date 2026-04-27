@@ -17,11 +17,6 @@ app.use(cors({ origin: ['http://localhost:4200', 'https://webcad.duckdns.org'], 
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use(cors({
-//   // origin: '*'
-//   origin: ['http://localhost:4200']
-// }));
-
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/session', sessionRoutes);

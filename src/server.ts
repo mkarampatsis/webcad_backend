@@ -7,10 +7,15 @@ if (fs.existsSync('.env.local')) {
 }
 
 import app from './app';
-import './config/mongo';
+import { connectDB } from './config/mongo';
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-  console.log(`Backend listening on port ${PORT}`);
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Backend listening on port ${PORT}`);
+  });
+}).catch(err => {
+  console.error('Failed to connect to MongoDB', err);
+  process.exit(1);
 });
