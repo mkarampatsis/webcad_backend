@@ -18,10 +18,10 @@ export const createUser = async (data: Partial<IUser>): Promise<IUser> => {
 };
 
 export const updateUser = async (username: string, payload: Partial<IUser>): Promise<IUser | null>  => {
-  return await User.findOneAndUpdate({username:username}, payload, { new: true }).populate('roles').lean().exec();
+  return await User.findByIdAndUpdate({ username: username }, payload, { new: true }).populate('roles').lean().exec();
 };
 
 export const deleteUser = async (username: string): Promise<boolean> => {
-  const result = await User.findOneAndDelete({ username }).exec();
+  const result = await User.findByIdAndDelete({ username }).exec();
   return !!result;
 };

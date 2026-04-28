@@ -61,13 +61,18 @@ export const startSession = async (email: string) => {
 
 export const stopSession = async (sessionId: string) => {
   try {
-    const session = await Session.findOne({ _id: sessionId });
+    console.log('Stopping session:', sessionId);
+    const session = await sessionDAO.findById(sessionId);
+    console.log('Stopping session:', sessionId, session);
     if (!session) return { status: false, message: 'Session not found' };
 
     await stopStudentContainer(session.containerName);
-    session.status = 'stopped';
-    session.lastActivityAt = new Date();
-    await session.save();
+    const payload: UpdateSessionDTO  = {
+      status: 'stopped',
+      lastActivityAt: new Date()
+    };
+    const updatedSession = await sessionDAO.updateSession(session._id, payload);
+    if (!updatedSession) return { status: false, message: 'Failed to update session' };
 
     return { status: true, message: 'Session stopped' };
   } catch (err) {

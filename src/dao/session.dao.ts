@@ -18,10 +18,10 @@ export const createSession = async (data: Partial<ISession>): Promise<ISession> 
 };
 
 export const updateSession = async (id: string, payload: Partial<ISession>): Promise<ISession | null>  => {
-  return await Session.findOneAndUpdate({ _id: id }, payload, { new: true }).lean().exec();
+  return await Session.findByIdAndUpdate({ _id: id }, payload, { new: true }).lean().exec();
 };
 
 export const deleteSession = async (id: string): Promise<boolean> => {
-  const result = await Session.findOneAndDelete({ _id: id }).exec();
+  const result = await Session.findByIdAndDelete({ _id: id }).exec();
   return !!result;
 };

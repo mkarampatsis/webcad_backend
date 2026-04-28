@@ -11,6 +11,6 @@ router.get('/email/:email', authenticate, sessionCtrl.getSessionByEmail);
 router.post('/start', authenticate, sessionCtrl.createSession);
 
 // POST /session/stop
-router.post('/stop', authenticate, sessionCtrl.stopSession);
+router.post('/stop/:sessionId', authenticate, sessionCtrl.stopSession);
 
 export default router;
