@@ -19,7 +19,7 @@ export const googleLogin = async (req: Request, res: Response, next: NextFunctio
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const credentials: LoginRegisteredUserDTO = req.body;
-    
+    console.log(credentials);
     const result = await authService.login(credentials.email, credentials.password);
     
     if (!result.status) 
