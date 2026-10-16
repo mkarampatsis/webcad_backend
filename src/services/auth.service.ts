@@ -25,7 +25,9 @@ export const googleLogin = async(idToken:string) =>{
     if (!user) {
       user = await userService.createGoogleUser({
         email: googleUser.email!,
-        name: googleUser.name || 'Google User',
+        fullname: googleUser.name,
+        firstname: googleUser.given_name,
+        lastname: googleUser.family_name,
         photoUrl: googleUser.picture || '',
         userId: googleUser.sub
       });
@@ -35,7 +37,9 @@ export const googleLogin = async(idToken:string) =>{
       {
         userId: googleUser.sub,
         email: googleUser.email,
-        name: googleUser.name,
+        fullname: googleUser.name,
+        firstname: googleUser.given_name,
+        lastname: googleUser.given_name,
         photoUrl: googleUser.picture,
         roles: user.roles
       },
@@ -64,7 +68,9 @@ export const login = async (email: string, password: string) => {
     {
       userId: user.userId,
       email: user.email,
-      name: user.name,
+      fullname: user.fullname,
+      firstname: user.firstname,
+      lastname: user.lastname,
       photoUrl: user.photoUrl,
       roles: user.roles
     },

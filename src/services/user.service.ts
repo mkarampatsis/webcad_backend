@@ -83,7 +83,9 @@ export const createGoogleUser = async (data: userDTO.CreateGoogleUserDTO) => {
 export const updateUser = async (username: string, payload: userDTO.UpdateUserDTO) => {
   const updateData: Partial<IUser> = {};
 
-  if (payload.name !== undefined) updateData.name = payload.name;
+  if (payload.fullname !== undefined) updateData.fullname = payload.fullname;
+  if (payload.firstname !== undefined) updateData.firstname = payload.firstname;
+  if (payload.lastname !== undefined) updateData.lastname = payload.lastname;
   if (payload.password) {
     updateData.password = await bcrypt.hash(payload.password, SALT_ROUNDS);
   }

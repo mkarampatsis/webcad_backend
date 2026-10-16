@@ -1,9 +1,12 @@
+import { StringQueryTypeCasting } from "mongoose";
 import { RoleDTO } from "./role.dto";
 
 export interface CreateGoogleUserDTO {
   userId: string;
   email: string;
-  name: string;
+  fullname: string;
+  firstname: string;
+  lastname: string;
   photoUrl?: string;
   roles?: string[];
 }
@@ -11,7 +14,9 @@ export interface CreateGoogleUserDTO {
 export interface CreateRegisteredUserDTO {
   userId: string;
   email: string;
-  name: string;
+  fullname: string;
+  firstname: string;
+  lastname: string;
   password: string;
   photoUrl?: string;
   roles?: string[];
@@ -21,13 +26,17 @@ export interface ResponseUserDTO {
   id: string;
   userId: string;
   email: string;
-  name: string;
+  fullname: string;
+  firstname: string;
+  lastname: string;
   photoUrl?: string;
   roles?: RoleDTO[];
 }
 
 export interface UpdateUserDTO {
-  name?: string;
+  fullname: string;
+  firstname: string;
+  lastname: string;
   password?: string;
   roles?: string[];
 }
